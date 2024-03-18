@@ -1,0 +1,179 @@
+Face Recognition Attendance System: A Python Project That Helped Me Stand Out in My Software Developer Interview
+
+HARSH MISHRA
+
+·
+
+Follow
+
+4 min read
+
+·
+
+Oct 12, 2023
+
+Listen
+
+Share
+
+More
+
+Introduction
+
+Face recognition attendance systems are a popular and emerging technology that is being used in a variety of industries, including education, healthcare, and security. These systems offer a number of advantages over traditional attendance systems, such as fingerprint scanners and ID cards. Face recognition systems are more contactless, which can help to reduce the spread of germs. They are also more difficult to tamper with, as it is
+
+My Project
+
+I recently developed a face recognition attendance system as a personal project. I used the Python programming language and the face_recognition library to build the system. The system works by capturing video from the default camera, detecting faces, and comparing them to a database of known faces. If the system finds a match, it marks the person as present.
+
+Challenges
+
+One of the biggest challenges I faced in developing this system was getting the face recognition algorithm to be accurate. There are a number of factors that can affect the accuracy of face recognition, such as lighting conditions, facial expressions, and head poses. I had to experiment with different parameters and techniques to get the algorithm to be as accurate as possible.
+
+Another challenge I faced was making the system user-friendly. I wanted the system to be easy to use for both the administrator and the users. I also wanted to make the system secure and prevent unauthorized access.
+
+CODE
+
+import face_recognition
+import cv2
+import numpy as np
+import csv
+from datetime import datetime
+
+# Initialize the video capture object for the default camera
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+
+# Load known faces
+known_face_encodings = []
+known_face_names = []
+for person in ["Harsh Mishra", "Kumar Sundaram"]:
+image_path = f"faces/{person}.jpg"
+image = face_recognition.load_image_file(image_path)
+encoding = face_recognition.face_encodings(image)[0]
+known_face_encodings.append(encoding)
+known_face_names.append(person)
+
+# Create a copy of the known face names for expected students
+expected_students = known_face_names.copy()
+
+# Initialize variables for face locations and encodings
+face_locations = []
+face_encodings = []
+
+# Get the current time
+now = datetime.now()
+current_date = now.strftime("%d-%m-%y")
+
+# Open a CSV file for writing attendance
+with open(f"{current_date}.csv", "w+", newline="") as f:
+writer = csv.writer(f)
+
+# Start the main video capture loop
+while True:
+_, frame = cap.read()
+small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+rgb_small_frame = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
+
+# Recognize faces in the frame
+face_locations = face_recognition.face_locations(rgb_small_frame)
+face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
+
+for face_encoding in face_encodings:
+matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+face_distance = face_recognition.face_distance(known_face_encodings, face_encoding)
+best_match_index = np.argmin(face_distance)
+
+if matches[best_match_index]:
+name = known_face_names[best_match_index]
+
+# Add text if the person is present
+font = cv2.FONT_HERSHEY_SIMPLEX
+bottom_left_corner_of_text = (10, 100)
+font_scale = 1.5
+font_color = (255, 0, 0)
+thickness = 3
+line_type = 2
+cv2.putText(frame, f"{name} PRESENT", bottom_left_corner_of_text, 0, font_scale, font_color, thickness, line_type)
+
+if name in expected_students:
+expected_students.remove(name)
+current_time = now.strftime("%H-%M-%S")
+writer.writerow([name, current_time])
+
+cv2.imshow("Attendance System", frame)
+
+if cv2.waitKey(1) & 0xFF == ord("q"):
+break
+
+# Release the video capture object and close windows
+cap.release()
+cv2.destroyAllWindows()
+
+Code Explanation
+
+The code starts by importing the necessary libraries: face_recognition, cv2, numpy, csv, and datetime.
+
+Next, the video capture object is initialized for the default camera.
+
+Then, the known faces are loaded from the faces/ directory. For each person, the image is loaded and the face encoding is calculated. The face encodings and names are stored in two lists, known_face_encodings and known_face_names, respectively.
+
+A copy of the known face names is created for the expected students. This list will be used to track which students have marked attendance.
+
+Next, the variables for face locations and encodings are initialized.
+
+The current time is retrieved and the current date is formatted in the %d-%m-%y format.
+
+A CSV file is opened for writing attendance. The CSV file will have two columns: name and time.
+
+Module Explanation
+
+The following is a brief explanation of the modules used in the code:
+
+• face_recognition: This module provides a Python implementation of various face recognition algorithms, including the FaceNet algorithm.
+
+• cv2: This module provides a Python interface to the OpenCV library, which is a popular computer vision library.
+
+• NumPy: This module provides a Python interface to the NumPy library, which is a popular scientific computing library.
+
+• CSV: This module provides a Python interface to the CSV file format.
+
+• DateTime: This module provides a Python interface to the datetime object, which represents a date and time.
+
+Outcomes
+
+I am very happy with the outcome of my project. The face recognition attendance system I developed is accurate, user-friendly, and secure. I am confident that it could be used in a variety of real-world settings.
+
+How This Project Helped Me Stand Out in My Interview
+
+I recently used this face recognition attendance system project in my software developer interview. The interviewer was very impressed with the project and asked me a number of questions about it. I was able to answer all of the interviewer’s questions confidently and in detail. I believe that this project was a key factor in me getting the job.
+
+Important Links
+
+My blog post about my interview (KICKDRUM ): [https://medium.com/@HARSHMISHRA_HMC/kickdrum-interview-experienece-on-campus-3f27c488cc95]
+
+My GitHub repository for the face recognition attendance system project: [https://github.com/HARSHMISHRA-521/Python-Projects/tree/main/Face_Recognization_Attendance]
+
+Python Course Link (Access the Playlist here): https://www.youtube.com/playlist?list=PLu0W_9lII9agwh1XjRt242xIpHhPT2llg
+
+Project Link (Face Recognization) : https://www.youtube.com/watch?v=fqF9M92jzUo
+
+Python Documentation Links
+
+• Python documentation for the face_recognition library: [https://www.python.org/doc/]
+
+• Python documentation for the OpenCV library: [link to Python documentation]
+
+Conclusion
+
+I am very grateful for the opportunity to have developed this face recognition attendance system project. It has helped me to learn a number of new skills and to develop a deeper understanding. I am also excited to see how this project can be used to make a positive impact on the world.
+
+Thanks for Reading. Kindly follow me for more such articles and if you find my content valuable. Happy Coding :)
+
+Harsh Mishra on Linkedin: https://www.linkedin.com/in/mishraharsh-hmc/
+Harsh Mishra on Github : https://github.com/HARSHMISHRA-521
+
+Software Development
+
+Face Recognition
+
+difficult to forge a face.
